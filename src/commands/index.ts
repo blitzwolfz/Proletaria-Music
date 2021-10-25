@@ -1,7 +1,7 @@
 import { QueryType } from "discord-player";
 import { Client, Message, MessageEmbed } from "discord.js";
 import ms from "ms";
-import { player } from "../index";
+import { cmd, player } from "../index";
 import type { Command } from "../type";
 import { musicPermissions } from "../type";
 
@@ -362,8 +362,33 @@ export const queue: Command = {
 	},
 };
 
+export const help: Command = {
+	name: "help",
+	aliases: ["menu"],
+	description: "",
+	group: "help",
+	owner: false,
+	voiceChannel:false,
+	async execute(message: Message, client: Client, args: string[]) {
+		const embed = new MessageEmbed();
+		
+		embed.setColor('RED');
+		embed.setAuthor(client.user!.username, client.user!.displayAvatarURL({ size: 1024, dynamic: true }));
+		
+		const commands = cmd.filter(x => !x.owner);
+		
+		embed.setDescription("Among US");
+		embed.addField(`Enabled - ${commands.length}`, commands.map(x => `\`${x.name}${x.aliases!.join("") !== undefined ? ` (${x.aliases?.map(y => y).join(', ')})\`` : '\`'}`).join(' | '));
+		
+		embed.setTimestamp();
+		
+		message.channel.send({ embeds: [embed] });
+	},
+};
+
 export default [
 	queue,
+	help,
 	volume,
 	stop,
 	skip,
