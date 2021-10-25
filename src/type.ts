@@ -26,7 +26,8 @@ export let musicPermissions = {
 			ytdlOptions: {
 				quality: 'highestaudio',
 				highWaterMark: 1 << 25
-			}
+			},
+			connectionTimeout: 120000
 		}
 	}
 }
